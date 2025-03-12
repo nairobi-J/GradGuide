@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Button from './Button'; // Import the Button component
 
 const SignupModal = ({ isOpen, onClose }) => {
-  // State to manage form inputs
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -13,6 +12,9 @@ const SignupModal = ({ isOpen, onClose }) => {
     careerGoals: '',
     resume: null,
   });
+
+  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
+  const modalRef = useRef(null);
 
   // Handle input changes
   const handleInputChange = (e) => {
@@ -39,22 +41,48 @@ const SignupModal = ({ isOpen, onClose }) => {
     onClose(); // Close the modal after submission
   };
 
+  // Handle scroll event
+  useEffect(() => {
+    const modal = modalRef.current;
+    const handleScroll = () => {
+      if (modal) {
+        const { scrollTop, scrollHeight, clientHeight } = modal;
+        const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10; // 10px buffer
+        setShowScrollIndicator(!isAtBottom);
+      }
+    };
+
+    if (modal) {
+      modal.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      if (modal) {
+        modal.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, []);
+
   // If the modal is not open, return null
   if (!isOpen) return null;
 
   return (
-    
-    <div className=" p-4 w-120 text-black fixed inset-0 flex items-center justify-center">
-      
-      <div className="bg-white p-4 rounded-lg shadow-md w-800 max-w-md">
-      <div className="mt-4 text-center flex justify-end">
+    <div className="text-black fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 font-semi-bold">
+      <div
+        ref={modalRef}
+        className="bg-white p-8 rounded-lg shadow-md w-full max-w-md max-h-[80vh] overflow-y-auto scrollbar-hide relative"
+      >
+        {/* Close Button */}
+        <div className="flex justify-end">
           <Button
             title="X"
             onClick={onClose}
             className="bg-blue-100 hover:bg-gray-600"
           />
         </div>
-        <h2 className="text-2xl font-bold mb-6 text-center">Student Sign Up</h2>
+
+        {/* Modal Content */}
+        <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Name Input */}
           <div className="grid grid-cols-3 gap-4 items-center">
@@ -106,7 +134,7 @@ const SignupModal = ({ isOpen, onClose }) => {
 
           {/* Field of Interest Dropdown */}
           <div className="grid grid-cols-3 gap-4 items-center">
-            <label htmlFor="fieldOfInterest" className="block text-sm font-medium text-black">
+            <label htmlFor="fieldOfInterest" className="block text-sm font-medium text-gray-700">
               Field of Interest
             </label>
             <select
@@ -114,7 +142,7 @@ const SignupModal = ({ isOpen, onClose }) => {
               name="fieldOfInterest"
               value={formData.fieldOfInterest}
               onChange={handleInputChange}
-              className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 col-span-2"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 col-span-2"
               required
             >
               <option value="">Select Field</option>
@@ -138,7 +166,7 @@ const SignupModal = ({ isOpen, onClose }) => {
               name="educationLevel"
               value={formData.educationLevel}
               onChange={handleInputChange}
-              className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 col-span-2"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 col-span-2"
               required
             >
               <option value="">Select Education Level</option>
@@ -212,8 +240,42 @@ const SignupModal = ({ isOpen, onClose }) => {
           </div>
         </form>
 
-        {/* Close Button */}
-      
+        {/* "Or" Divider */}
+        <div className="text-center my-4">
+          <p className="text-sm text-gray-600">or</p>
+        </div>
+
+        {/* Sign Up with Google Button */}
+        <Button
+          type="button"
+          title="Sign Up with Google"
+          className="w-full bg-red-500 hover:bg-red-600"
+        />
+
+        {/* Fade Effect */}
+        <div className="fade-effect"></div>
+
+        {/* Scroll Indicator */}
+        {showScrollIndicator && (
+          <div className="absolute bottom-0 left-0 right-0 flex justify-center pb-2">
+            <div className="text-gray-500 bounce">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                />
+              </svg>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
