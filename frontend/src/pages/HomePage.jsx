@@ -3,12 +3,12 @@ import myPhoto from '../assets/career.jpg';
 import Button from '../components/Button';
 import { useState } from 'react';
 import SignupModal from '../components/SignupModal';
+import SigninModal from '../components/SigninModal';
 
 const HomePage = () => {
-    const handleClick = () => {
-        alert('Button clicked!');
-      };
+   
       const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
+      const [isSigninModalOpen, setIsSigninModalOpen] = useState(false)
 
   // Open the modal
   const openSignupModal = () => {
@@ -19,12 +19,20 @@ const HomePage = () => {
   const closeSignupModal = () => {
     setIsSignupModalOpen(false);
   };
+  const openSigninModal = () => {
+    setIsSigninModalOpen(true);
+  };
+
+  // Close the modal
+  const closeSigninModal = () => {
+    setIsSigninModalOpen(false);
+  };
   return (
-    <div className="relative w-screen h-screen overflow-hidden">
+    <div className="relative w-screen h-screen overflow-hidden fixed">
     <img
       src={myPhoto}
       alt="Career Photo"
-      className="w-full h-full  object-cover"
+      className="w-full h-full object-cover "
     />
 
   
@@ -42,7 +50,12 @@ const HomePage = () => {
       {/* Render the SignupModal */}
      
       <p>or</p>
-      <Button title="Sign In" onClick={handleClick} />
+      <Button
+        title="Sign In"
+        onClick={openSigninModal}
+        className="bg-green-500 hover:bg-green-600"
+      />
+    <SigninModal isOpen={isSigninModalOpen} onClose={closeSigninModal} />
       
     </div>
 

@@ -4,7 +4,7 @@ const Button = ({ title, onClick, className }) => {
   return (
     <button
       onClick={onClick}
-      className={`${className} text-xl bg-blue text-white rounded-lg hover:bg-blue-600 transition-colors `}
+      className={` text-xl bg-blue text-white rounded-lg hover:bg-blue-600 transition-colors ${className}`}
     >
       {title}
     </button>

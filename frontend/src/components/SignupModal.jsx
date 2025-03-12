@@ -44,14 +44,14 @@ const SignupModal = ({ isOpen, onClose }) => {
 
   return (
     
-    <div className="text-black fixed inset-2 flex items-center justify-center  w-200 ">
+    <div className=" p-4 w-120 text-black fixed inset-0 flex items-center justify-center">
       
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-3xl max-h-[90vh] overflow-y-auto ">
-      <div className="col-span-3 flex justify-end mt-1">
+      <div className="bg-white p-4 rounded-lg shadow-md w-800 max-w-md">
+      <div className="mt-4 text-center flex justify-end">
           <Button
             title="X"
             onClick={onClose}
-            className="bg-red-200 hover:bg-gray-600"
+            className="bg-blue-100 hover:bg-gray-600"
           />
         </div>
         <h2 className="text-2xl font-bold mb-6 text-center">Student Sign Up</h2>
