@@ -10,7 +10,7 @@ const SignupModal = ({ isOpen, onClose }) => {
     educationLevel: '',
     skills: [],
     careerGoals: '',
-    resume: null,
+    //resume: null,
   });
 
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
@@ -26,20 +26,38 @@ const SignupModal = ({ isOpen, onClose }) => {
   };
 
   // Handle file input changes
-  const handleFileChange = (e) => {
-    setFormData({
-      ...formData,
-      resume: e.target.files[0],
-    });
-  };
+  // const handleFileChange = (e) => {
+  //   setFormData({
+  //     ...formData,
+  //     resume: e.target.files[0],
+  //   });
+  // };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form Data Submitted:', formData);
-    // Add your signup logic here (e.g., API call)
-    onClose(); // Close the modal after submission
-  };
+
+    const formDataToSend = new FormData();
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("password", formData.password);
+    formDataToSend.append("fieldOfInterest", formData.fieldOfInterest);
+    formDataToSend.append("educationLevel", formData.educationLevel);
+    formDataToSend.append("skills", JSON.stringify(formData.skills)); // Convert array to JSON
+    formDataToSend.append("careerGoals", formData.careerGoals);
+
+    // if (formData.resume) {
+    //     formDataToSend.append("resume", formData.resume);
+    // }
+
+    const response = await fetch("http://localhost:5000/register", {
+        method: "POST",
+        body: formDataToSend, 
+    });
+
+    const data = await response.json();
+    console.log(data);
+};
 
   // Handle scroll event
   useEffect(() => {
@@ -216,7 +234,7 @@ const SignupModal = ({ isOpen, onClose }) => {
           </div>
 
           {/* Resume Upload */}
-          <div className="grid grid-cols-3 gap-4 items-center">
+          {/* <div className="grid grid-cols-3 gap-4 items-center">
             <label htmlFor="resume" className="block text-sm font-medium text-gray-700">
               Upload Resume (PDF)
             </label>
@@ -228,7 +246,7 @@ const SignupModal = ({ isOpen, onClose }) => {
               className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 col-span-2"
               accept=".pdf"
             />
-          </div>
+          </div> */}
 
           {/* Submit Button */}
           <div className="col-span-3 flex justify-center">
@@ -282,3 +300,5 @@ const SignupModal = ({ isOpen, onClose }) => {
 };
 
 export default SignupModal;
+
+
